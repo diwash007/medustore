@@ -24,76 +24,78 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
         body: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 50),
-                child: const Icon(
-                  Icons.account_circle,
-                  color: secondaryColor,
-                  size: 70,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(90.0),
-                    ),
-                    labelText: 'Email',
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 50),
+                  child: const Icon(
+                    Icons.account_circle,
+                    color: secondaryColor,
+                    size: 70,
                   ),
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                child: TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(90.0),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(90.0),
+                      ),
+                      labelText: 'Email',
                     ),
-                    labelText: 'Password',
                   ),
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                child: TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(90.0),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  child: TextField(
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(90.0),
+                      ),
+                      labelText: 'Password',
                     ),
-                    labelText: 'Confirm Password',
                   ),
                 ),
-              ),
-              Container(
-                  height: 80,
-                  padding: const EdgeInsets.all(20),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(50),
-                        backgroundColor: primaryColor),
-                    child: const Text('Register'),
-                    onPressed: () {},
-                  )),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/login',
-                  );
-                },
-                child: Text(
-                  'Already have an account?',
-                  style: TextStyle(color: Colors.grey[600]),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  child: TextField(
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(90.0),
+                      ),
+                      labelText: 'Confirm Password',
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                Container(
+                    height: 80,
+                    padding: const EdgeInsets.all(20),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: const Size.fromHeight(50),
+                          backgroundColor: primaryColor),
+                      child: const Text('Register'),
+                      onPressed: () {},
+                    )),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/login',
+                    );
+                  },
+                  child: Text(
+                    'Already have an account?',
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+                ),
+              ],
+            ),
           ),
         ));
   }

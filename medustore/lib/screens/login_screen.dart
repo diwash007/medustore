@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medustore/theme/theme_constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:medustore/utils/constants.dart';
+import 'dart:convert';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -16,15 +17,9 @@ class _MyLoginScreenState extends State<LoginScreen> {
 
   void login(String email, String password) async {
     try {
-      var response =
-          await http.post(Uri.parse('$apiBaseUrl/store/auth'), headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/x-www-form-urlencoded"
-      }, body: {
-        "email": email,
-        "password": password
-      });
-      print(response.body);
+      var response = await http.post(Uri.parse('$apiBaseUrl/store/auth'),
+          headers: {"Content-Type": "application/json"},
+          body: json.encode({"email": email, "password": password}));
       if (response.statusCode == 200) {
         print("loggedin");
       } else {

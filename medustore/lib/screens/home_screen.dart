@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medustore/models/product.dart';
 import 'package:medustore/screens/login_screen.dart';
+import 'package:medustore/screens/product_screen.dart';
 import 'package:medustore/theme/theme_constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -134,7 +135,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
                                           onTap: () {
                                             Navigator.pushNamed(
                                               context,
-                                              '/register',
+                                              '/product',
+                                              arguments: {'item': item},
                                             );
                                           },
                                           child: SizedBox(
@@ -181,10 +183,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        const Text(
-          'Index 1: Business',
-          style: optionStyle,
-        ),
+        const ProdcutScreen(),
         const LoginScreen(),
       ].elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(

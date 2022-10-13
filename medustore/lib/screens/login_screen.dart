@@ -15,14 +15,16 @@ class _MyLoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   void login(String email, String password) async {
-    print(email + password);
     try {
       var response =
-          await http.post(Uri.parse('$apiBaseUrl/store/auth'), body: {
-        'email': email,
-        'password': password,
+          await http.post(Uri.parse('$apiBaseUrl/store/auth'), headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded"
+      }, body: {
+        "email": email,
+        "password": password
       });
-
+      print(response.body);
       if (response.statusCode == 200) {
         print("loggedin");
       } else {

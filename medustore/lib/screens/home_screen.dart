@@ -16,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _MyHomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
 
   static const TextStyle optionStyle = TextStyle(
     fontSize: 30,

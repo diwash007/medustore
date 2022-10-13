@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medustore/theme/theme_constants.dart';
+import 'package:http/http.dart' as http;
+import 'package:medustore/utils/constants.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -9,6 +11,28 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _MyLoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  void login(String email, String password) async {
+    print(email + password);
+    try {
+      var response =
+          await http.post(Uri.parse('$apiBaseUrl/store/auth'), body: {
+        'email': email,
+        'password': password,
+      });
+
+      if (response.statusCode == 200) {
+        print("loggedin");
+      } else {
+        print("oops");
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +63,8 @@ class _MyLoginScreenState extends State<LoginScreen> {
                 ),
                 Container(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  child: TextField(
+                  child: TextFormField(
+                    controller: _emailController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(90.0),
@@ -50,7 +75,8 @@ class _MyLoginScreenState extends State<LoginScreen> {
                 ),
                 Container(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  child: TextField(
+                  child: TextFormField(
+                    controller: _passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -68,7 +94,10 @@ class _MyLoginScreenState extends State<LoginScreen> {
                           minimumSize: const Size.fromHeight(50),
                           backgroundColor: primaryColor),
                       child: const Text('Log In'),
-                      onPressed: () {},
+                      onPressed: () {
+                        login(_emailController.text.toString(),
+                            _passwordController.text.toString());
+                      },
                     )),
                 TextButton(
                   onPressed: () {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medustore/models/product.dart';
+import 'package:medustore/screens/cart_screen.dart';
 import 'package:medustore/screens/login_screen.dart';
-import 'package:medustore/screens/product_screen.dart';
 import 'package:medustore/theme/theme_constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -17,12 +17,7 @@ class HomeScreen extends StatefulWidget {
 
 class _MyHomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  final TextEditingController _textEditingController = TextEditingController();
-
-  static const TextStyle optionStyle = TextStyle(
-    fontSize: 30,
-    fontWeight: FontWeight.bold,
-  );
+  // final TextEditingController _searchController = TextEditingController();
 
   Future<List> httpGetData({link}) async {
     var url = Uri.parse(link);
@@ -48,11 +43,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
           appBar: AppBar(
             title: const Text("Medustore"),
             flexibleSpace: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: <Color>[Color(0xFF592ee1), Color(0xFFb836d9)]),
+              decoration: BoxDecoration(
+                gradient: medusaGradient,
               ),
             ),
           ),
@@ -183,7 +175,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        const ProdcutScreen(),
+        const CartScreen(),
         const LoginScreen(),
       ].elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(

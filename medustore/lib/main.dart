@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:medustore/screens/home_screen.dart';
-import 'package:medustore/screens/loading_screen.dart';
 import 'package:medustore/screens/login_screen.dart';
 import 'package:medustore/screens/product_screen.dart';
 import 'package:medustore/screens/register_screen.dart';

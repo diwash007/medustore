@@ -20,11 +20,8 @@ class _ProdcutScreenState extends State<ProdcutScreen> {
       appBar: AppBar(
         title: Text(item.title),
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: <Color>[Color(0xFF592ee1), Color(0xFFb836d9)]),
+          decoration: BoxDecoration(
+            gradient: medusaGradient,
           ),
         ),
       ),

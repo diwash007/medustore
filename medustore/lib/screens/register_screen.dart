@@ -170,10 +170,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     )),
                 TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/login',
-                    );
+                    Navigator.pop(context);
                   },
                   child: Text(
                     'Already have an account?',

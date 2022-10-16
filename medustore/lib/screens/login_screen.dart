@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:medustore/theme/theme_constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:medustore/utils/constants.dart';
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -21,7 +24,9 @@ class _MyLoginScreenState extends State<LoginScreen> {
           headers: {"Content-Type": "application/json"},
           body: json.encode({"email": email, "password": password}));
       if (response.statusCode == 200) {
-        print("loggedin");
+        var cookie = Cookie.fromSetCookieValue(response.headers["set-cookie"]!);
+        const storage = FlutterSecureStorage();
+        await storage.write(key: 'cookie', value: cookie.value);
       } else {
         print("oops");
       }

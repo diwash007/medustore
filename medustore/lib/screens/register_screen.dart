@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:medustore/theme/theme_constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/constants.dart';
 
@@ -38,7 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         String customerId = data["customer"]["id"];
         createCart(customerId, email);
       } else {
-        print("Error");
+        print("can't sign in");
       }
     } catch (e) {
       print(e.toString());
@@ -47,17 +48,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void createCart(String customerId, String email) async {
     try {
-      var response = await http.post(Uri.parse('$apiBaseUrl/store/carts'),
-          headers: {"Content-Type": "application/json"},
-          body: json.encode({
-            "email": email,
-            "customer_id": customerId,
-          }));
+      var response = await http.post(
+        Uri.parse('$apiBaseUrl/store/carts'),
+        headers: {"Content-Type": "application/json"},
+      );
       if (response.statusCode == 200) {
-        print("loggedin");
-        print(response.body);
+        print("Cart created");
+        var prefs = await SharedPreferences.getInstance();
+        await prefs.setString('cart', json.decode(response.body)["cart"]["id"]);
       } else {
-        print("oops");
+        print("cart was not created");
+        print(response.body);
       }
     } catch (e) {
       print(e.toString());

@@ -29,7 +29,9 @@ class _MyLoginScreenState extends State<LoginScreen> {
     values = await SharedPreferences.getInstance();
     var email = values.getString('email');
     var password = values.getString('password');
-    login(email, password);
+    if (email != null && password != null) {
+      login(email, password);
+    }
   }
 
   void login(String email, String password) async {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:medustore/theme/theme_constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:medustore/utils/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProdcutScreen extends StatefulWidget {
   const ProdcutScreen({super.key, this.item});
@@ -17,20 +18,21 @@ class _ProdcutScreenState extends State<ProdcutScreen> {
   int quantity = 1;
 
   void addToCart(var item) async {
+    var prefs = await SharedPreferences.getInstance();
+    String? cartId = prefs.getString('cart');
     try {
       var response = await http.post(
-          Uri.parse(
-              '$apiBaseUrl/store/carts/cart_01GFE01THSWKXA264M4MC3GXDM/line-items'),
+          Uri.parse('$apiBaseUrl/store/carts/$cartId/line-items'),
           headers: {"Content-Type": "application/json"},
           body: json.encode({
             "variant_id": item.variantId,
             "quantity": quantity,
           }));
       if (response.statusCode == 200) {
-        print("loggedin");
+        print("added to cart successfull");
         print(response.body);
       } else {
-        print("oops");
+        print("couldn't add to cart");
       }
     } catch (e) {
       print(e.toString());

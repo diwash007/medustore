@@ -36,13 +36,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
-  client_cookie:
-    dependency: "direct main"
-    description:
-      name: client_cookie
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.2"
   clock:
     dependency: transitive
     description:

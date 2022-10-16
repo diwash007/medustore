@@ -40,7 +40,6 @@ dependencies:
   flutter_native_splash: ^2.2.11
   http: ^0.13.5
   shared_preferences: ^2.0.15
-  client_cookie: ^3.0.2
 
 dev_dependencies:
   flutter_test:

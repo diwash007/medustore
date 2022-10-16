@@ -1,12 +1,11 @@
 import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:medustore/theme/theme_constants.dart';
-import 'package:http/http.dart' as http;
-import 'package:medustore/utils/constants.dart';
 import 'dart:convert';
-
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:medustore/theme/theme_constants.dart';
+import 'package:medustore/utils/constants.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -24,20 +23,13 @@ class _MyLoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     getLocalStorageData();
-    try {
-      if (values != null) {
-        var email = values.getString('email');
-        var password = values.getString('password');
-        login(email, password);
-      }
-    } catch (e) {
-      print("login vayena");
-      print(e);
-    }
   }
 
   void getLocalStorageData() async {
     values = await SharedPreferences.getInstance();
+    var email = values.getString('email');
+    var password = values.getString('password');
+    login(email, password);
   }
 
   void login(String email, String password) async {
@@ -50,7 +42,7 @@ class _MyLoginScreenState extends State<LoginScreen> {
         await values.setString('cookie', cookie.value);
         await values.setString('email', email);
         await values.setString('password', password);
-        Navigator.pushNamed(
+        Navigator.pushReplacementNamed(
           context,
           '/',
         );

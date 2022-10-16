@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:medustore/theme/theme_constants.dart';
+import 'package:http/http.dart' as http;
+import 'package:medustore/utils/constants.dart';
 
 class ProdcutScreen extends StatefulWidget {
   const ProdcutScreen({super.key, this.item});
@@ -11,7 +14,29 @@ class ProdcutScreen extends StatefulWidget {
 }
 
 class _ProdcutScreenState extends State<ProdcutScreen> {
-  int quantity = 99;
+  int quantity = 1;
+
+  void addToCart(var item) async {
+    try {
+      var response = await http.post(
+          Uri.parse(
+              '$apiBaseUrl/store/carts/cart_01GFE01THSWKXA264M4MC3GXDM/line-items'),
+          headers: {"Content-Type": "application/json"},
+          body: json.encode({
+            "variant_id": item.variantId,
+            "quantity": quantity,
+          }));
+      if (response.statusCode == 200) {
+        print("loggedin");
+        print(response.body);
+      } else {
+        print("oops");
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Map arguments = ModalRoute.of(context)?.settings.arguments as Map;
@@ -95,7 +120,9 @@ class _ProdcutScreenState extends State<ProdcutScreen> {
                         minimumSize: const Size.fromHeight(50),
                         backgroundColor: primaryColor),
                     child: const Text('Add To Cart'),
-                    onPressed: () {},
+                    onPressed: () {
+                      addToCart(item);
+                    },
                   )),
             ],
           ),

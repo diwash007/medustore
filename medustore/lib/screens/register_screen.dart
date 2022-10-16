@@ -34,8 +34,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
           }));
       if (response.statusCode == 200) {
         print("Signed Up");
+        var data = json.decode(response.body);
+        String customerId = data["customer"]["id"];
+        createCart(customerId, email);
       } else {
         print("Error");
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  void createCart(String customerId, String email) async {
+    try {
+      var response = await http.post(Uri.parse('$apiBaseUrl/store/carts'),
+          headers: {"Content-Type": "application/json"},
+          body: json.encode({
+            "email": email,
+            "customer_id": customerId,
+          }));
+      if (response.statusCode == 200) {
+        print("loggedin");
+        print(response.body);
+      } else {
+        print("oops");
       }
     } catch (e) {
       print(e.toString());

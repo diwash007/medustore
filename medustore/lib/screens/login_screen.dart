@@ -5,7 +5,8 @@ import 'package:medustore/theme/theme_constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:medustore/utils/constants.dart';
 import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -17,6 +18,27 @@ class LoginScreen extends StatefulWidget {
 class _MyLoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  dynamic values;
+
+  @override
+  void initState() {
+    super.initState();
+    getLocalStorageData();
+    try {
+      if (values != null) {
+        var email = values.getString('email');
+        var password = values.getString('password');
+        login(email, password);
+      }
+    } catch (e) {
+      print("login vayena");
+      print(e);
+    }
+  }
+
+  void getLocalStorageData() async {
+    values = await SharedPreferences.getInstance();
+  }
 
   void login(String email, String password) async {
     try {
@@ -25,8 +47,13 @@ class _MyLoginScreenState extends State<LoginScreen> {
           body: json.encode({"email": email, "password": password}));
       if (response.statusCode == 200) {
         var cookie = Cookie.fromSetCookieValue(response.headers["set-cookie"]!);
-        const storage = FlutterSecureStorage();
-        await storage.write(key: 'cookie', value: cookie.value);
+        await values.setString('cookie', cookie.value);
+        await values.setString('email', email);
+        await values.setString('password', password);
+        Navigator.pushNamed(
+          context,
+          '/',
+        );
       } else {
         print("oops");
       }

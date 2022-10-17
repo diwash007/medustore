@@ -17,16 +17,29 @@ class HomeScreen extends StatefulWidget {
 
 class _MyHomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  // final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+  List<Product> products = [];
 
   Future<List> httpGetData({link}) async {
     var url = Uri.parse(link);
     var response = await http.get(url);
     if (response.statusCode == 200) {
       Map<String, dynamic> body = jsonDecode(response.body);
-      return body["products"].map<Product>(Product.fromJson).toList();
+      products = body["products"].map<Product>(Product.fromJson).toList();
+      return products;
     }
     throw json.decode(response.body)['error']['message'];
+  }
+
+  void search({required searchQuery}) {
+    Navigator.pushNamed(
+      context,
+      '/search',
+      arguments: {
+        "products": products,
+        "searchQuery": searchQuery,
+      },
+    );
   }
 
   void _onItemTapped(int index) {
@@ -35,6 +48,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
     });
   }
 
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,28 +73,42 @@ class _MyHomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 18,
                 ),
-                TextField(
-                  // controller: _textEditingController,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                      hintText: "Search",
-                      filled: true,
-                      fillColor: const Color.fromARGB(179, 255, 255, 255),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: const BorderSide(color: primaryColor),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: const BorderSide(
-                          width: 1,
-                          color: primaryColor,
+                Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    controller: _searchController,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                        hintText: "Search",
+                        filled: true,
+                        fillColor: const Color.fromARGB(179, 255, 255, 255),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: primaryColor),
                         ),
-                      ),
-                      suffixIcon: const Icon(
-                        Icons.search,
-                        color: primaryColor,
-                      )),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(
+                            width: 1,
+                            color: primaryColor,
+                          ),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.search),
+                          color: primaryColor,
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              search(searchQuery: _searchController.text);
+                            }
+                          },
+                        )),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Enter Search Query';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
                 const SizedBox(
                   height: 20,

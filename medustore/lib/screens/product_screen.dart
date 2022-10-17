@@ -6,9 +6,7 @@ import 'package:medustore/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProdcutScreen extends StatefulWidget {
-  const ProdcutScreen({super.key, this.item});
-
-  final dynamic item;
+  const ProdcutScreen({super.key});
 
   @override
   State<ProdcutScreen> createState() => _ProdcutScreenState();

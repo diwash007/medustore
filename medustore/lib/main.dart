@@ -3,6 +3,7 @@ import 'package:medustore/screens/home_screen.dart';
 import 'package:medustore/screens/login_screen.dart';
 import 'package:medustore/screens/product_screen.dart';
 import 'package:medustore/screens/register_screen.dart';
+import 'package:medustore/screens/search_screen.dart';
 import 'package:medustore/theme/theme_constants.dart';
 import 'package:medustore/theme/theme_manager.dart';
 
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterScreen(),
         '/account': (context) => const LoginScreen(),
         '/product': (context) => const ProdcutScreen(),
+        '/search': (context) => const SearchScreen(),
       },
     );
   }

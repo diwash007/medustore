@@ -18,6 +18,7 @@ class _MyLoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   dynamic values;
+  String errorString = "";
 
   @override
   void initState() {
@@ -50,12 +51,18 @@ class _MyLoginScreenState extends State<LoginScreen> {
         );
       } else {
         print("oops");
+        if (response.statusCode == 401) {
+          setState(() {
+            errorString = "Email and Password do not match";
+          });
+        }
       }
     } catch (e) {
       print(e.toString());
     }
   }
 
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,26 +90,60 @@ class _MyLoginScreenState extends State<LoginScreen> {
                 ),
                 Container(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  child: TextFormField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(90.0),
-                      ),
-                      labelText: 'Email',
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  child: TextFormField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(90.0),
-                      ),
-                      labelText: 'Password',
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(90.0),
+                            ),
+                            labelText: 'Email',
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Email is required';
+                            }
+                            bool emailValid = RegExp(
+                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                .hasMatch(value);
+                            if (!emailValid) {
+                              return 'Please enter a valid email';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(90.0),
+                            ),
+                            labelText: 'Password',
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please Enter Password';
+                            }
+                            return null;
+                          },
+                        ),
+                        errorString.isNotEmpty
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: Text(
+                                  errorString,
+                                  style: const TextStyle(color: Colors.red),
+                                ),
+                              )
+                            : const SizedBox(),
+                      ],
                     ),
                   ),
                 ),
@@ -115,8 +156,10 @@ class _MyLoginScreenState extends State<LoginScreen> {
                           backgroundColor: primaryColor),
                       child: const Text('Log In'),
                       onPressed: () {
-                        login(_emailController.text.toString(),
-                            _passwordController.text.toString());
+                        if (_formKey.currentState!.validate()) {
+                          login(_emailController.text.toString(),
+                              _passwordController.text.toString());
+                        }
                       },
                     )),
                 TextButton(

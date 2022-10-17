@@ -31,7 +31,7 @@ class _MyLoginScreenState extends State<LoginScreen> {
     var email = values.getString('email');
     var password = values.getString('password');
     if (email != null && password != null) {
-      // login(email, password);
+      login(email, password);
     }
   }
 
@@ -51,7 +51,6 @@ class _MyLoginScreenState extends State<LoginScreen> {
         );
       } else {
         print("oops");
-        print(response.statusCode);
         if (response.statusCode == 401) {
           setState(() {
             errorString = "Email and Password do not match";

@@ -105,6 +105,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             labelText: 'Email',
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Email is required';
+                            }
+                            bool emailValid = RegExp(
+                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                .hasMatch(value);
+                            if (!emailValid) {
+                              return 'Please enter a valid email';
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(
                           height: 20,
@@ -117,6 +129,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             labelText: 'First Name',
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Firstname is required';
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(
                           height: 20,
@@ -129,6 +147,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             labelText: 'Last Name',
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Lastname is required';
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(
                           height: 20,
@@ -142,6 +166,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             labelText: 'Password',
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please Enter Password';
+                            }
+                            if (value.length < 8) {
+                              return 'Password must be at least 8 characters';
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(
                           height: 20,

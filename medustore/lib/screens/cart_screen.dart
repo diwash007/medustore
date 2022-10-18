@@ -90,12 +90,9 @@ class _CartScreenState extends State<CartScreen> {
                                     return Card(
                                       elevation: 1.0,
                                       child: ListTile(
-                                        leading: Image(
-                                          height: 80,
-                                          width: 80,
-                                          image: NetworkImage(
-                                            item["thumbnail"],
-                                          ),
+                                        leading: Image.network(
+                                          item["thumbnail"],
+                                          fit: BoxFit.cover,
                                         ),
                                         title: Text(
                                           item["title"],

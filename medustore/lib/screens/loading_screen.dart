@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:medustore/screens/home_screen.dart';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({Key? key}) : super(key: key);
@@ -9,39 +12,10 @@ class LoadingScreen extends StatefulWidget {
 
 class LoadingScreenState extends State<LoadingScreen> {
   @override
-  void initState() {
-    super.initState();
-    // getData();
-  }
-
-  // Future<dynamic> getData() async {
-  //   NetworkHelper networkHelper = NetworkHelper();
-  //   Map<dynamic, dynamic> shareData = await networkHelper.getData();
-  //   updateData(shareData);
-  //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-  //     return HomeScreen(shareData: shareData);
-  //   }));
-  // }
-
-  // Future<void> updateData(Map shareData) async {
-  //   var shares = await DatabaseHelper.instance.getShares();
-  //   for (var share in shares) {
-  //     if (shareData[share.company]['closing'] != null) {
-  //       await DatabaseHelper.instance.update(
-  //         Share(
-  //           id: share.id,
-  //           company: share.company,
-  //           kitta: share.kitta,
-  //           closing: shareData[share.company]['closing'],
-  //           diff: shareData[share.company]['diff'],
-  //         ),
-  //       );
-  //     }
-  //   }
-  // }
-
-  @override
   Widget build(BuildContext context) {
+    Timer(const Duration(seconds: 3), () {
+      Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+    });
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(

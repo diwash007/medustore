@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medustore/screens/cart_screen.dart';
 import 'package:medustore/screens/home_screen.dart';
+import 'package:medustore/screens/loading_screen.dart';
 import 'package:medustore/screens/login_screen.dart';
 import 'package:medustore/screens/product_screen.dart';
 import 'package:medustore/screens/register_screen.dart';
@@ -25,9 +26,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       darkTheme: darkTheme,
       themeMode: _themeManager.themeMode,
-      initialRoute: '/',
+      initialRoute: '/loading',
       routes: {
         '/': (context) => const HomeScreen(),
+        '/loading': (context) => const LoadingScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/account': (context) => const LoginScreen(),

@@ -17,20 +17,20 @@ class _CartScreenState extends State<CartScreen> {
   String? cartId;
   dynamic items;
   Future<List> getCartItems() async {
-    var values = await SharedPreferences.getInstance();
-    cartId = values.getString('cart');
-    var response = await http.post(
-      Uri.parse('$apiBaseUrl/store/carts/$cartId'),
-      headers: {"Content-Type": "application/json"},
-    );
-    if (response.statusCode == 200) {
-      print("fetched cart data");
-      items = jsonDecode(response.body)["cart"]["items"];
+    try {
+      var values = await SharedPreferences.getInstance();
+      cartId = values.getString('cart');
+      var response = await http.post(
+        Uri.parse('$apiBaseUrl/store/carts/$cartId'),
+        headers: {"Content-Type": "application/json"},
+      );
+      if (response.statusCode == 200) {
+        items = jsonDecode(response.body)["cart"]["items"];
+      }
       return items;
-    } else {
-      print("hmm");
+    } catch (e) {
+      return items;
     }
-    return items;
   }
 
   void updateCartItem(String cartId, String productId, int quantity) async {
@@ -77,8 +77,9 @@ class _CartScreenState extends State<CartScreen> {
                         );
                       default:
                         if (snapshot.hasError) {
-                          return Center(
-                            child: Text('${snapshot.error}'),
+                          return const Center(
+                            child:
+                                Text('Something went wrong. Please try again.'),
                           );
                         } else {
                           final items = snapshot.data as List<dynamic>;

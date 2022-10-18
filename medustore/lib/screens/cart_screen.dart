@@ -14,21 +14,40 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  String? cartId;
+  dynamic items;
   Future<List> getCartItems() async {
     var values = await SharedPreferences.getInstance();
-    var cart = values.getString('cart');
+    cartId = values.getString('cart');
     var response = await http.post(
-      Uri.parse('$apiBaseUrl/store/carts/$cart'),
+      Uri.parse('$apiBaseUrl/store/carts/$cartId'),
       headers: {"Content-Type": "application/json"},
     );
     if (response.statusCode == 200) {
       print("fetched cart data");
-      var items = jsonDecode(response.body)["cart"]["items"];
+      items = jsonDecode(response.body)["cart"]["items"];
       return items;
     } else {
       print("hmm");
     }
-    throw json.decode(response.body);
+    return items;
+  }
+
+  void updateCartItem(String cartId, String productId, int quantity) async {
+    if (quantity <= 0) return;
+    try {
+      var response = await http.post(
+        Uri.parse('$apiBaseUrl/store/carts/$cartId/line-items/$productId'),
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(
+          {"quantity": quantity},
+        ),
+      );
+      if (response.statusCode == 200) {
+      } else {}
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override
@@ -67,8 +86,57 @@ class _CartScreenState extends State<CartScreen> {
                               child: ListView(
                                   shrinkWrap: true,
                                   children: items.map((item) {
-                                    return Text(
-                                        "${item['title']} - ${item['quantity']}");
+                                    return Card(
+                                      elevation: 1.0,
+                                      child: ListTile(
+                                        leading: Image(
+                                          height: 80,
+                                          width: 80,
+                                          image: NetworkImage(
+                                            item["thumbnail"],
+                                          ),
+                                        ),
+                                        title: Text(
+                                          item["title"],
+                                        ),
+                                        subtitle: Row(
+                                          children: [
+                                            IconButton(
+                                              icon: const Icon(
+                                                Icons.remove_circle,
+                                                color: primaryColor,
+                                              ),
+                                              onPressed: () {
+                                                setState(() {
+                                                  updateCartItem(
+                                                      cartId!,
+                                                      item["id"],
+                                                      item["quantity"] - 1);
+                                                });
+                                              },
+                                            ),
+                                            Text(item["quantity"].toString()),
+                                            IconButton(
+                                              icon: const Icon(
+                                                Icons.add_circle,
+                                                color: primaryColor,
+                                              ),
+                                              onPressed: () {
+                                                setState(() {
+                                                  updateCartItem(
+                                                      cartId!,
+                                                      item["id"],
+                                                      item["quantity"] + 1);
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                        trailing: Text(
+                                          '\$${item["total"]}',
+                                        ),
+                                      ),
+                                    );
                                   }).toList()));
                         }
                     }

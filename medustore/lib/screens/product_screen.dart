@@ -122,6 +122,7 @@ class _ProdcutScreenState extends State<ProdcutScreen> {
                     child: const Text('Add To Cart'),
                     onPressed: () {
                       addToCart(item);
+                      Navigator.pushNamed(context, '/cart');
                     },
                   )),
             ],

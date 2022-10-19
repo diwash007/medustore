@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:medustore/theme/theme_constants.dart';
 import 'package:http/http.dart' as http;
@@ -29,7 +30,6 @@ class _CartScreenState extends State<CartScreen> {
       if (response.statusCode == 200) {
         cart = jsonDecode(response.body)["cart"];
         items = cart["items"];
-        items.add(cart["items"][0]);
       }
       return items;
     } catch (e) {
@@ -151,15 +151,17 @@ class _CartScreenState extends State<CartScreen> {
                             const SizedBox(
                               height: 30,
                             ),
-                            Text(
-                              "Total:\t\$${cart["total"]}",
-                              textAlign: TextAlign.right,
-                              style: const TextStyle(fontSize: 16),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: Text(
+                                "Total:\t\$${cart["total"]}",
+                                style: const TextStyle(fontSize: 16),
+                              ),
                             ),
                             Container(
-                                height: 70,
+                                height: 80,
                                 padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
+                                    const EdgeInsets.symmetric(vertical: 20),
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       minimumSize: const Size.fromHeight(50),

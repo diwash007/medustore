@@ -28,6 +28,7 @@ class _ProdcutScreenState extends State<ProdcutScreen> {
           }));
       if (response.statusCode == 200) {
         print("added to cart successfull");
+        Navigator.pushNamed(context, '/cart');
       } else {
         print("couldn't add to cart");
       }
@@ -121,7 +122,6 @@ class _ProdcutScreenState extends State<ProdcutScreen> {
                     child: const Text('Add To Cart'),
                     onPressed: () {
                       addToCart(item);
-                      Navigator.pushNamed(context, '/cart');
                     },
                   )),
             ],

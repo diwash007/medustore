@@ -29,6 +29,7 @@ class _CartScreenState extends State<CartScreen> {
       if (response.statusCode == 200) {
         cart = jsonDecode(response.body)["cart"];
         items = cart["items"];
+        items.add(cart["items"][0]);
       }
       return items;
     } catch (e) {
@@ -64,113 +65,116 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            FutureBuilder(
-              future: getCartItems(),
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: primaryColor,
-                      ),
-                    );
-                  default:
-                    if (snapshot.hasError) {
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FutureBuilder(
+                future: getCartItems(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
                       return const Center(
-                        child: Text('Something went wrong. Please try again.'),
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
                       );
-                    } else {
-                      final items = snapshot.data as List<dynamic>;
-                      return Flexible(
-                          child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ListView(
-                            shrinkWrap: true,
-                            children: items.map(
-                              (item) {
-                                return Card(
-                                  elevation: 1.0,
-                                  child: ListTile(
-                                    leading: Image.network(
-                                      item["thumbnail"],
-                                      fit: BoxFit.cover,
-                                    ),
-                                    title: Text(
-                                      item["title"],
-                                    ),
-                                    subtitle: Row(
-                                      children: [
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.remove_circle,
-                                            color: primaryColor,
+                    default:
+                      if (snapshot.hasError) {
+                        return const Center(
+                          child:
+                              Text('Something went wrong. Please try again.'),
+                        );
+                      } else {
+                        final items = snapshot.data as List<dynamic>;
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ListView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              children: items.map(
+                                (item) {
+                                  return Card(
+                                    elevation: 1.0,
+                                    child: ListTile(
+                                      leading: Image.network(
+                                        item["thumbnail"],
+                                        fit: BoxFit.cover,
+                                      ),
+                                      title: Text(
+                                        item["title"],
+                                      ),
+                                      subtitle: Row(
+                                        children: [
+                                          IconButton(
+                                            icon: const Icon(
+                                              Icons.remove_circle,
+                                              color: primaryColor,
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                updateCartItem(
+                                                    cartId!,
+                                                    item["id"],
+                                                    item["quantity"] - 1);
+                                              });
+                                            },
                                           ),
-                                          onPressed: () {
-                                            setState(() {
-                                              updateCartItem(
-                                                  cartId!,
-                                                  item["id"],
-                                                  item["quantity"] - 1);
-                                            });
-                                          },
-                                        ),
-                                        Text(item["quantity"].toString()),
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.add_circle,
-                                            color: primaryColor,
+                                          Text(item["quantity"].toString()),
+                                          IconButton(
+                                            icon: const Icon(
+                                              Icons.add_circle,
+                                              color: primaryColor,
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                updateCartItem(
+                                                    cartId!,
+                                                    item["id"],
+                                                    item["quantity"] + 1);
+                                              });
+                                            },
                                           ),
-                                          onPressed: () {
-                                            setState(() {
-                                              updateCartItem(
-                                                  cartId!,
-                                                  item["id"],
-                                                  item["quantity"] + 1);
-                                            });
-                                          },
-                                        ),
-                                      ],
+                                        ],
+                                      ),
+                                      trailing: Text(
+                                        '\$${item["total"]}',
+                                      ),
                                     ),
-                                    trailing: Text(
-                                      '\$${item["total"]}',
-                                    ),
-                                  ),
-                                );
-                              },
-                            ).toList(),
-                          ),
-                        ],
-                      ));
-                    }
-                }
-              },
-            ),
-            Column(
-              children: [
-                Text(
-                  "Total:\t\$${cart["total"]}",
-                  textAlign: TextAlign.right,
-                  style: const TextStyle(fontSize: 16),
-                ),
-                Container(
-                    height: 80,
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(50),
-                          backgroundColor: primaryColor),
-                      child: const Text('Checkout'),
-                      onPressed: () {},
-                    )),
-              ],
-            ),
-          ],
+                                  );
+                                },
+                              ).toList(),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            Text(
+                              "Total:\t\$${cart["total"]}",
+                              textAlign: TextAlign.right,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            Container(
+                                height: 70,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      minimumSize: const Size.fromHeight(50),
+                                      backgroundColor: primaryColor),
+                                  child: const Text('Checkout'),
+                                  onPressed: () {},
+                                ))
+                          ],
+                        );
+                      }
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

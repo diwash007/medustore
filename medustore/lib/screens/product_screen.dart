@@ -28,7 +28,6 @@ class _ProdcutScreenState extends State<ProdcutScreen> {
           }));
       if (response.statusCode == 200) {
         print("added to cart successfull");
-        print(response.body);
       } else {
         print("couldn't add to cart");
       }
@@ -114,7 +113,7 @@ class _ProdcutScreenState extends State<ProdcutScreen> {
               ),
               Container(
                   height: 80,
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(50),

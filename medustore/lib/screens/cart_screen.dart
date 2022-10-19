@@ -145,22 +145,31 @@ class _CartScreenState extends State<CartScreen> {
                               },
                             ).toList(),
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text("Total: ${cart["total"]}"),
-                              ElevatedButton(
-                                onPressed: () {},
-                                child: const Text('Checkout'),
-                              )
-                            ],
-                          ),
                         ],
                       ));
                     }
                 }
               },
-            )
+            ),
+            Column(
+              children: [
+                Text(
+                  "Total:\t\$${cart["total"]}",
+                  textAlign: TextAlign.right,
+                  style: const TextStyle(fontSize: 16),
+                ),
+                Container(
+                    height: 80,
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: const Size.fromHeight(50),
+                          backgroundColor: primaryColor),
+                      child: const Text('Checkout'),
+                      onPressed: () {},
+                    )),
+              ],
+            ),
           ],
         ),
       ),

@@ -36,6 +36,112 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     }
   }
 
+  Future<void> addShippingAddress() async {
+    try {
+      var values = await SharedPreferences.getInstance();
+      var cartId = values.getString('cart');
+      var response = await http.post(
+        Uri.parse('$apiBaseUrl/store/carts/$cartId'),
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(
+          {
+            "shipping_address": {
+              "company": "abc",
+              "first_name": "abc",
+              "last_name": "abc",
+              "address_1": "abc",
+              "city": "abc"
+            }
+          },
+        ),
+      );
+      print(response.body);
+      if (response.statusCode == 200) {}
+    } catch (e) {
+      print(".............");
+    }
+  }
+
+  Future<void> initializePaymentSession() async {
+    try {
+      var values = await SharedPreferences.getInstance();
+      var cartId = values.getString('cart');
+      var response = await http.post(
+        Uri.parse('$apiBaseUrl/store/carts/$cartId/payment-sessions'),
+        headers: {"Content-Type": "application/json"},
+      );
+      print(response.body);
+      if (response.statusCode == 200) {}
+    } catch (e) {}
+  }
+
+  Future<void> selectPaymentSession() async {
+    try {
+      var values = await SharedPreferences.getInstance();
+      var cartId = values.getString('cart');
+      var response = await http.post(
+          Uri.parse('$apiBaseUrl/store/carts/$cartId/payment-session'),
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: {
+            "provider_id": "stripe",
+          });
+      print(response.body);
+      if (response.statusCode == 200) {}
+    } catch (e) {}
+  }
+
+  Future<String> getPaymentOption() async {
+    String shippingId = "";
+    try {
+      var response =
+          await http.get(Uri.parse('$apiBaseUrl/store/shipping-options'));
+      if (response.statusCode == 200) {
+        shippingId = jsonDecode(response.body)["shipping_options"][0]["id"];
+        print(shippingId);
+      }
+      return shippingId;
+    } catch (e) {
+      return shippingId;
+    }
+  }
+
+  Future<void> addShippingMethod(String optionId) async {
+    try {
+      var values = await SharedPreferences.getInstance();
+      var cartId = values.getString('cart');
+      var response = await http.post(
+          Uri.parse('$apiBaseUrl/store/carts/$cartId/shippinng-methods'),
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: {
+            "option_id": optionId,
+          });
+      print(response.body);
+      if (response.statusCode == 200) {}
+    } catch (e) {}
+  }
+
+  Future<void> placeOrder() async {
+    try {
+      var values = await SharedPreferences.getInstance();
+      var cartId = values.getString('cart');
+      var response = await http.post(
+        Uri.parse('$apiBaseUrl/store/carts/$cartId/complete'),
+        headers: {"Content-Type": "application/json"},
+      );
+      print(response.body);
+      if (response.statusCode == 200) {
+        print("Hjello");
+      }
+    } catch (e) {
+      print(e);
+      return cart;
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -215,8 +321,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     minimumSize: const Size.fromHeight(50),
                                     backgroundColor: primaryColor),
                                 child: const Text('Place Order'),
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {}
+                                onPressed: () async {
+                                  if (!_formKey.currentState!.validate()) {
+                                    await addShippingAddress();
+                                    String shippingOptionId =
+                                        await getPaymentOption();
+                                    await initializePaymentSession();
+                                    await selectPaymentSession();
+                                    await addShippingMethod(shippingOptionId);
+                                    await placeOrder();
+                                  }
                                 },
                               ),
                             ),

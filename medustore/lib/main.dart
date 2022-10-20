@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medustore/screens/cart_screen.dart';
+import 'package:medustore/screens/checkout_screen.dart';
 import 'package:medustore/screens/home_screen.dart';
 import 'package:medustore/screens/loading_screen.dart';
 import 'package:medustore/screens/login_screen.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         '/product': (context) => const ProdcutScreen(),
         '/search': (context) => const SearchScreen(),
         '/cart': (context) => const CartScreen(),
+        '/checkout': (context) => const CheckoutScreen(),
       },
     );
   }

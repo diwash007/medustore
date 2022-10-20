@@ -166,7 +166,9 @@ class _CartScreenState extends State<CartScreen> {
                                       minimumSize: const Size.fromHeight(50),
                                       backgroundColor: primaryColor),
                                   child: const Text('Checkout'),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, '/checkout');
+                                  },
                                 ))
                           ],
                         );

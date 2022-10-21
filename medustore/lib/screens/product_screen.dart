@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:medustore/theme/theme_constants.dart';
 import 'package:http/http.dart' as http;
@@ -56,8 +57,14 @@ class _ProdcutScreenState extends State<ProdcutScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network(
-                item.thumbnail ??
+              CachedNetworkImage(
+                progressIndicatorBuilder: (context, url, progress) =>
+                    const Center(
+                  child: CircularProgressIndicator(
+                    color: primaryColor,
+                  ),
+                ),
+                imageUrl: item.thumbnail ??
                     "https://deconova.eu/wp-content/uploads/2016/02/default-placeholder.png",
                 fit: BoxFit.cover,
                 height: 300,

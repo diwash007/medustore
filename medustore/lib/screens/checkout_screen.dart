@@ -194,7 +194,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ).toList(),
                             ),
                             const SizedBox(
-                              height: 30,
+                              height: 10,
                             ),
                             Align(
                               alignment: Alignment.bottomRight,
@@ -205,7 +205,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 ),
                               ),
                             ),
-                            const Divider(),
+                            const Divider(
+                              height: 30,
+                            ),
                             Column(
                               children: [
                                 const Align(
@@ -243,10 +245,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     ),
                                     const Text('Card'),
                                   ],
-                                ),
+                                )
                               ],
                             ),
-                            const Divider(),
+                            const Divider(
+                              height: 30,
+                            ),
                             paymentMethod == PaymentMethod.cod
                                 ? Column(
                                     children: [

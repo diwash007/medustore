@@ -38,6 +38,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
         var data = json.decode(response.body);
         String customerId = data["customer"]["id"];
         createCart(customerId, email);
+
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Registered"),
+              content: const Text("Successfully registered."),
+              actions: [
+                TextButton(
+                  child: const Text("Login now"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          },
+        );
       } else {
         print("can't sign in");
       }

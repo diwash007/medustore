@@ -19,6 +19,7 @@ class _MyLoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   dynamic values;
   String errorString = "";
+  bool isloggedIn = false;
 
   @override
   void initState() {
@@ -41,14 +42,14 @@ class _MyLoginScreenState extends State<LoginScreen> {
           headers: {"Content-Type": "application/json"},
           body: json.encode({"email": email, "password": password}));
       if (response.statusCode == 200) {
+        setState(() {
+          isloggedIn = true;
+        });
+
         var cookie = Cookie.fromSetCookieValue(response.headers["set-cookie"]!);
         await values.setString('cookie', cookie.value);
         await values.setString('email', email);
         await values.setString('password', password);
-        Navigator.pushReplacementNamed(
-          context,
-          '/',
-        );
       } else {
         print("oops");
         if (response.statusCode == 401) {
@@ -76,106 +77,109 @@ class _MyLoginScreenState extends State<LoginScreen> {
         ),
         body: Center(
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 50),
-                  child: const Icon(
-                    Icons.account_circle,
-                    color: secondaryColor,
-                    size: 70,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(90.0),
-                            ),
-                            labelText: 'Email',
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Email is required';
-                            }
-                            bool emailValid = RegExp(
-                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                .hasMatch(value);
-                            if (!emailValid) {
-                              return 'Please enter a valid email';
-                            }
-                            return null;
-                          },
+            child: isloggedIn
+                ? Text("Logged in as ${values.getString('email')}")
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 50),
+                        child: const Icon(
+                          Icons.account_circle,
+                          color: secondaryColor,
+                          size: 70,
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          controller: _passwordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(90.0),
-                            ),
-                            labelText: 'Password',
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please Enter Password';
-                            }
-                            return null;
-                          },
-                        ),
-                        errorString.isNotEmpty
-                            ? Padding(
-                                padding: const EdgeInsets.only(top: 20),
-                                child: Text(
-                                  errorString,
-                                  style: const TextStyle(color: Colors.red),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                controller: _emailController,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(90.0),
+                                  ),
+                                  labelText: 'Email',
                                 ),
-                              )
-                            : const SizedBox(),
-                      ],
-                    ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Email is required';
+                                  }
+                                  bool emailValid = RegExp(
+                                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                      .hasMatch(value);
+                                  if (!emailValid) {
+                                    return 'Please enter a valid email';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                controller: _passwordController,
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(90.0),
+                                  ),
+                                  labelText: 'Password',
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please Enter Password';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              errorString.isNotEmpty
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(top: 20),
+                                      child: Text(
+                                        errorString,
+                                        style:
+                                            const TextStyle(color: Colors.red),
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                          height: 80,
+                          padding: const EdgeInsets.all(20),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                minimumSize: const Size.fromHeight(50),
+                                backgroundColor: primaryColor),
+                            child: const Text('Log In'),
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                login(_emailController.text.toString(),
+                                    _passwordController.text.toString());
+                              }
+                            },
+                          )),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/register',
+                          );
+                        },
+                        child: Text(
+                          'Create a new account?',
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                Container(
-                    height: 80,
-                    padding: const EdgeInsets.all(20),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(50),
-                          backgroundColor: primaryColor),
-                      child: const Text('Log In'),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          login(_emailController.text.toString(),
-                              _passwordController.text.toString());
-                        }
-                      },
-                    )),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/register',
-                    );
-                  },
-                  child: Text(
-                    'Create a new account?',
-                    style: TextStyle(color: Colors.grey[600]),
-                  ),
-                ),
-              ],
-            ),
           ),
         ));
   }

@@ -115,23 +115,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     }
   }
 
-  Future<void> addShippingMethod(String optionId) async {
-    try {
-      var values = await SharedPreferences.getInstance();
-      var cartId = values.getString('cart');
-      var response = await http.post(
-          Uri.parse('$apiBaseUrl/store/carts/$cartId/shippinng-methods'),
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: {
-            "option_id": optionId,
-          });
-      print(response.body);
-      if (response.statusCode == 200) {}
-    } catch (e) {}
-  }
-
   Future<void> placeOrder(key) async {
     try {
       var values = await SharedPreferences.getInstance();
@@ -330,7 +313,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     backgroundColor: primaryColor),
                                 child: const Text('Place Order'),
                                 onPressed: () async {
-                                  if (!_formKey.currentState!.validate()) {
+                                  if (_formKey.currentState!.validate()) {
                                     // await addShippingAddress();
                                     // String shippingOptionId =
                                     //     await getPaymentOption();
@@ -340,6 +323,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     // await selectPaymentSession();
                                     // await addShippingMethod(shippingOptionId);
                                     await placeOrder(key);
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text("Completed"),
+                                          content: const Text(
+                                              "Order Sucessfully Placed."),
+                                          actions: [
+                                            TextButton(
+                                              child: const Text("Ok"),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                        ;
+                                      },
+                                    );
                                   }
                                 },
                               ),
@@ -357,52 +359,3 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//  ListTile(
-//                                       leading: Image.network(
-//                                         item["thumbnail"],
-//                                         fit: BoxFit.cover,
-//                                       ),
-//                                       title: Text(
-//                                         item["title"],
-//                                       ),
-//                                       subtitle: Row(
-//                                         children: [
-//                                           IconButton(
-//                                             icon: const Icon(
-//                                               Icons.remove_circle,
-//                                               color: primaryColor,
-//                                             ),
-//                                             onPressed: () {},
-//                                           ),
-//                                           Text(item["quantity"].toString()),
-//                                           IconButton(
-//                                             icon: const Icon(
-//                                               Icons.add_circle,
-//                                               color: primaryColor,
-//                                             ),
-//                                             onPressed: () {},
-//                                           ),
-//                                         ],
-//                                       ),
-//                                       trailing: Text(
-//                                         '\$${item["total"]}',
-//                                       ),
-//                                     ),

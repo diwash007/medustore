@@ -334,7 +334,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             TextButton(
                                               child: const Text("Ok"),
                                               onPressed: () {
-                                                Navigator.of(context).pop();
+                                                Navigator
+                                                    .pushNamedAndRemoveUntil(
+                                                        context,
+                                                        '/',
+                                                        (_) => false);
                                               },
                                             ),
                                           ],

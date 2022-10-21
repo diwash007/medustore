@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:medustore/theme/theme_constants.dart';
@@ -51,7 +52,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               "last_name": "abc",
               "address_1": "abc",
               "city": "abc"
-            }
+            },
+            "billing_address": "address",
+            "customer_id": "cus_01GFV4ZBDRVBYFZ2TZGR2ERYY0"
           },
         ),
       );
@@ -62,7 +65,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     }
   }
 
-  Future<void> initializePaymentSession() async {
+  Future<String?> initializePaymentSession() async {
     try {
       var values = await SharedPreferences.getInstance();
       var cartId = values.getString('cart');
@@ -70,9 +73,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         Uri.parse('$apiBaseUrl/store/carts/$cartId/payment-sessions'),
         headers: {"Content-Type": "application/json"},
       );
-      print(response.body);
-      if (response.statusCode == 200) {}
-    } catch (e) {}
+      String? key;
+      if (response.statusCode == 200) {
+        key = response.headers["idempotency-key"];
+      }
+      return key;
+    } catch (e) {
+      return "po";
+    }
   }
 
   Future<void> selectPaymentSession() async {
@@ -85,9 +93,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             "Content-Type": "application/json"
           },
           body: {
-            "provider_id": "stripe",
+            "provider_id": "manual",
           });
-      print(response.body);
+      print(json.decode(response.body)["cart"]["customer_id"]);
       if (response.statusCode == 200) {}
     } catch (e) {}
   }
@@ -124,15 +132,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     } catch (e) {}
   }
 
-  Future<void> placeOrder() async {
+  Future<void> placeOrder(key) async {
     try {
       var values = await SharedPreferences.getInstance();
       var cartId = values.getString('cart');
       var response = await http.post(
         Uri.parse('$apiBaseUrl/store/carts/$cartId/complete'),
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json", "idempotency-key": key},
       );
-      print(response.body);
+      log(response.body);
       if (response.statusCode == 200) {
         print("Hjello");
       }
@@ -323,13 +331,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 child: const Text('Place Order'),
                                 onPressed: () async {
                                   if (!_formKey.currentState!.validate()) {
-                                    await addShippingAddress();
-                                    String shippingOptionId =
-                                        await getPaymentOption();
-                                    await initializePaymentSession();
-                                    await selectPaymentSession();
-                                    await addShippingMethod(shippingOptionId);
-                                    await placeOrder();
+                                    // await addShippingAddress();
+                                    // String shippingOptionId =
+                                    //     await getPaymentOption();
+                                    String? key =
+                                        await initializePaymentSession();
+                                    print(key);
+                                    // await selectPaymentSession();
+                                    // await addShippingMethod(shippingOptionId);
+                                    await placeOrder(key);
                                   }
                                 },
                               ),

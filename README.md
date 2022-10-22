@@ -15,7 +15,7 @@ An ecommerce mobile application built using Medusa and Flutter.
 
 ### Preview
 
-![Demo](#)
+![https://cdn.pixabay.com/photo/2018/04/11/19/48/player-3311600_960_720.png](https://youtu.be/CyhJCKP0G84)
 
 ## Set up Project
 

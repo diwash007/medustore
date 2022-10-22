@@ -84,8 +84,7 @@ class _CartScreenState extends State<CartScreen> {
                     default:
                       if (snapshot.hasError) {
                         return const Center(
-                          child:
-                              Text('Something went wrong. Please try again.'),
+                          child: Text('Login to view cart.'),
                         );
                       } else {
                         final items = snapshot.data as List<dynamic>;

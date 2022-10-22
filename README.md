@@ -15,7 +15,8 @@ An ecommerce mobile application built using Medusa and Flutter.
 
 ### Preview
 
-[![Medustore](https://cdn.pixabay.com/photo/2018/04/11/19/48/player-3311600_960_720.png)](http://www.youtube.com/watch?v=CyhJCKP0G84 "Medustore")
+![Medustore Preview](assets/Medustore.gif)
+[Watch on YouTube](http://www.youtube.com/watch?v=CyhJCKP0G84 "Medustore")
 
 ## Set up Project
 

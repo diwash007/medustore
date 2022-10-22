@@ -1,13 +1,13 @@
 # Medustore
 
-![Medusa Hackathon 2022](https://cdn.discordapp.com/attachments/840469865420423189/1033052731985899600/simple-cover-template2_1.jpg)
+![Medusa Hackathon 2022](https://cdn.discordapp.com/attachments/840469865420423189/1033380987985469591/simple-cover-template2_1_1.jpg)
 
 ## About
 
 ### Participants
 
-[Diwash Dahal](https://github.com/diwash007) - [Twitter](https://https://twitter.com/DahalDiwash2) - Discord: Diwash YT#8746
-[Shreedesh Niroula](https://github.com/nshreedesh) - Discord: shreedesh#6922
+- [Diwash Dahal](https://github.com/diwash007) - [Twitter](https://https://twitter.com/DahalDiwash2) - Discord: Diwash YT#8746
+- [Shreedesh Niroula](https://github.com/nshreedesh) - Discord: shreedesh#6922
 
 ### Description
 
@@ -21,7 +21,7 @@ An open source ecommerce mobile application built using Medusa and Flutter.
 
 ### Prerequisites
 
-Before you start with the tutorial make sure you have
+Before you start with setting up the application make sure you have
 
 - [Node.js](https://nodejs.org/en/)
 - [Medusa server](https://docs.medusajs.com/quickstart/quick-start/)

@@ -6,12 +6,12 @@
 
 ### Participants
 
-- [Diwash Dahal](https://github.com/diwash007) - [Twitter](https://https://twitter.com/DahalDiwash2) - Discord: Diwash YT#8746
+- [Diwash Dahal](https://github.com/diwash007) - [Twitter](https://twitter.com/DahalDiwash2) - Discord: Diwash YT#8746
 - [Shreedesh Niroula](https://github.com/nshreedesh) - Discord: shreedesh#6922
 
 ### Description
 
-An open source ecommerce mobile application built using Medusa and Flutter.
+An ecommerce mobile application built using Medusa and Flutter.
 
 ### Preview
 

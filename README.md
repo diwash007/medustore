@@ -26,6 +26,7 @@ Before you start with setting up the application make sure you have
 - [Node.js](https://nodejs.org/en/)
 - [Medusa server](https://docs.medusajs.com/quickstart/quick-start/)
 - [Flutter](https://flutter.dev/)
+- [Android Studio SDK](https://developer.android.com/studio)
 
 ### Install Project
 
@@ -50,7 +51,9 @@ Before you start with setting up the application make sure you have
     flutter pub get
     ```
 
-4. Start the app
+4. Launch an android emulator from Android SDK
+
+5. Start the app
 
     ```bash
     flutter run

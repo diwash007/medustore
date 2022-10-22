@@ -32,6 +32,7 @@ class _ProdcutScreenState extends State<ProdcutScreen> {
         Navigator.pushNamed(context, '/cart');
       } else {
         print("couldn't add to cart");
+        Navigator.pushNamed(context, '/login');
       }
     } catch (e) {
       print(e.toString());

@@ -20,6 +20,7 @@ class _MyLoginScreenState extends State<LoginScreen> {
   dynamic values;
   String errorString = "";
   bool isloggedIn = false;
+  String loginEmail = "";
 
   @override
   void initState() {
@@ -33,6 +34,27 @@ class _MyLoginScreenState extends State<LoginScreen> {
     var password = values.getString('password');
     if (email != null && password != null) {
       login(email, password);
+    }
+  }
+
+  void createCart() async {
+    var prefs = await SharedPreferences.getInstance();
+    var cartId = prefs.getString('cart');
+    if (cartId!.isNotEmpty) return;
+    try {
+      var response = await http.post(
+        Uri.parse('$apiBaseUrl/store/carts'),
+        headers: {"Content-Type": "application/json"},
+      );
+      if (response.statusCode == 200) {
+        print("Cart created");
+        await prefs.setString('cart', json.decode(response.body)["cart"]["id"]);
+      } else {
+        print("cart was not created");
+        print(response.body);
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
 
@@ -50,6 +72,10 @@ class _MyLoginScreenState extends State<LoginScreen> {
         await values.setString('cookie', cookie.value);
         await values.setString('email', email);
         await values.setString('password', password);
+        setState(() {
+          loginEmail = values.getString('email');
+        });
+        createCart();
       } else {
         print("oops");
         if (response.statusCode == 401) {
@@ -64,6 +90,7 @@ class _MyLoginScreenState extends State<LoginScreen> {
   }
 
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +105,7 @@ class _MyLoginScreenState extends State<LoginScreen> {
         body: Center(
           child: SingleChildScrollView(
             child: isloggedIn
-                ? Text("Logged in as ${values.getString('email')}")
+                ? Text("Logged in as ${loginEmail}")
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,

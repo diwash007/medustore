@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:medustore/utils/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -43,7 +44,14 @@ class _MyHomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _onItemTapped(int index) {
+  void _onItemTapped(int index) async {
+    var prefs = await SharedPreferences.getInstance();
+    var cartId = prefs.getString('cart');
+
+    if (index == 1 && (cartId == null || cartId.isEmpty)) {
+      index++;
+    }
+
     setState(() {
       _selectedIndex = index;
     });

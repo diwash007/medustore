@@ -88,90 +88,97 @@ class _CartScreenState extends State<CartScreen> {
                         );
                       } else {
                         final items = snapshot.data as List<dynamic>;
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ListView(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              children: items.map(
-                                (item) {
-                                  return Card(
-                                    elevation: 1.0,
-                                    child: ListTile(
-                                      leading: Image.network(
-                                        item["thumbnail"],
-                                        fit: BoxFit.cover,
-                                      ),
-                                      title: Text(
-                                        item["title"],
-                                      ),
-                                      subtitle: Row(
-                                        children: [
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.remove_circle,
-                                              color: primaryColor,
+                        return items.isEmpty
+                            ? const Center(child: Text('Cart is empty.'))
+                            : Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ListView(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    children: items.map(
+                                      (item) {
+                                        return Card(
+                                          elevation: 1.0,
+                                          child: ListTile(
+                                            leading: Image.network(
+                                              item["thumbnail"],
+                                              fit: BoxFit.cover,
                                             ),
-                                            onPressed: () {
-                                              setState(() {
-                                                updateCartItem(
-                                                    cartId!,
-                                                    item["id"],
-                                                    item["quantity"] - 1);
-                                              });
-                                            },
-                                          ),
-                                          Text(item["quantity"].toString()),
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.add_circle,
-                                              color: primaryColor,
+                                            title: Text(
+                                              item["title"],
                                             ),
-                                            onPressed: () {
-                                              setState(() {
-                                                updateCartItem(
-                                                    cartId!,
-                                                    item["id"],
-                                                    item["quantity"] + 1);
-                                              });
-                                            },
+                                            subtitle: Row(
+                                              children: [
+                                                IconButton(
+                                                  icon: const Icon(
+                                                    Icons.remove_circle,
+                                                    color: primaryColor,
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      updateCartItem(
+                                                          cartId!,
+                                                          item["id"],
+                                                          item["quantity"] - 1);
+                                                    });
+                                                  },
+                                                ),
+                                                Text(item["quantity"]
+                                                    .toString()),
+                                                IconButton(
+                                                  icon: const Icon(
+                                                    Icons.add_circle,
+                                                    color: primaryColor,
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      updateCartItem(
+                                                          cartId!,
+                                                          item["id"],
+                                                          item["quantity"] + 1);
+                                                    });
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                            trailing: Text(
+                                              '\$${item["total"]}',
+                                            ),
                                           ),
-                                        ],
-                                      ),
-                                      trailing: Text(
-                                        '\$${item["total"]}',
-                                      ),
+                                        );
+                                      },
+                                    ).toList(),
+                                  ),
+                                  const SizedBox(
+                                    height: 30,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Text(
+                                      "Total:\t\$${cart["total"]}",
+                                      style: const TextStyle(fontSize: 16),
                                     ),
-                                  );
-                                },
-                              ).toList(),
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: Text(
-                                "Total:\t\$${cart["total"]}",
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                            ),
-                            Container(
-                                height: 80,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 20),
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      minimumSize: const Size.fromHeight(50),
-                                      backgroundColor: primaryColor),
-                                  child: const Text('Checkout'),
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, '/checkout');
-                                  },
-                                ))
-                          ],
-                        );
+                                  ),
+                                  Container(
+                                      height: 80,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 20),
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            minimumSize:
+                                                const Size.fromHeight(50),
+                                            backgroundColor: primaryColor),
+                                        child: const Text('Checkout'),
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                              context, '/checkout');
+                                        },
+                                      ))
+                                ],
+                              );
                       }
                   }
                 },

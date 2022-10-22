@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:medustore/models/product.dart';
 import 'package:medustore/theme/theme_constants.dart';
@@ -69,8 +70,15 @@ class _SearchScreenState extends State<SearchScreen> {
                                     SizedBox(
                                       width: 150,
                                       height: 110,
-                                      child: Image.network(
-                                        item.thumbnail ??
+                                      child: CachedNetworkImage(
+                                        progressIndicatorBuilder:
+                                            (context, url, progress) =>
+                                                const Center(
+                                          child: CircularProgressIndicator(
+                                            color: primaryColor,
+                                          ),
+                                        ),
+                                        imageUrl: item.thumbnail ??
                                             "https://deconova.eu/wp-content/uploads/2016/02/default-placeholder.png",
                                         fit: BoxFit.cover,
                                       ),

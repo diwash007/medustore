@@ -71,6 +71,11 @@ class _MyLoginScreenState extends State<LoginScreen> {
         await values.setString('cookie', cookie.value);
         await values.setString('email', email);
         await values.setString('password', password);
+
+        var data = json.decode(response.body);
+        String customerId = data["customer"]["id"];
+        values.setString("cid", customerId);
+
         createCart();
         setState(() {
           loginEmail = values.getString('email');

@@ -37,6 +37,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         print("Signed Up");
         var data = json.decode(response.body);
         String customerId = data["customer"]["id"];
+
         createCart(customerId, email);
 
         showDialog(

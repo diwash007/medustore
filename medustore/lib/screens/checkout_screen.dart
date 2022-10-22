@@ -145,7 +145,29 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         await prefs.setString('cart', json.decode(response.body)["cart"]["id"]);
       } else {
         print("cart was not created");
-        print(response.body);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> updateCart() async {
+    var prefs = await SharedPreferences.getInstance();
+    try {
+      var response = await http.post(
+          Uri.parse('$apiBaseUrl/store/carts/${prefs.getString('cart')}'),
+          headers: {"Content-Type": "application/json"},
+          body: json.encode({
+            "customer_id": prefs.getString("cid"),
+          }));
+
+      print(prefs.getString("cid"));
+      print(prefs.getString('cart'));
+      if (response.statusCode == 200) {
+        print("Cart updated");
+        await prefs.setString('cart', json.decode(response.body)["cart"]["id"]);
+      } else {
+        print("cart was not updated");
       }
     } catch (e) {
       print(e.toString());
@@ -155,6 +177,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    updateCart();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Checkout"),
@@ -338,12 +361,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
                                     // await addShippingAddress();
-                                    // String shippingOptionId =
-                                    //     await getPaymentOption();
+                                    String shippingOptionId =
+                                        await getPaymentOption();
                                     String? key =
                                         await initializePaymentSession();
-                                    print(key);
-                                    // await selectPaymentSession();
+                                    await selectPaymentSession();
                                     // await addShippingMethod(shippingOptionId);
                                     await placeOrder(key);
                                     createCart();

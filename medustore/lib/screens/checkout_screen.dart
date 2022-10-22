@@ -133,6 +133,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     }
   }
 
+  void createCart() async {
+    try {
+      var response = await http.post(
+        Uri.parse('$apiBaseUrl/store/carts'),
+        headers: {"Content-Type": "application/json"},
+      );
+      if (response.statusCode == 200) {
+        print("Cart created");
+        var prefs = await SharedPreferences.getInstance();
+        await prefs.setString('cart', json.decode(response.body)["cart"]["id"]);
+      } else {
+        print("cart was not created");
+        print(response.body);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -327,6 +346,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     // await selectPaymentSession();
                                     // await addShippingMethod(shippingOptionId);
                                     await placeOrder(key);
+                                    createCart();
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {

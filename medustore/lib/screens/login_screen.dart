@@ -40,7 +40,7 @@ class _MyLoginScreenState extends State<LoginScreen> {
   void createCart() async {
     var prefs = await SharedPreferences.getInstance();
     var cartId = prefs.getString('cart');
-    if (cartId!.isNotEmpty) return;
+    if (cartId != null) return;
     try {
       var response = await http.post(
         Uri.parse('$apiBaseUrl/store/carts'),
@@ -51,7 +51,6 @@ class _MyLoginScreenState extends State<LoginScreen> {
         await prefs.setString('cart', json.decode(response.body)["cart"]["id"]);
       } else {
         print("cart was not created");
-        print(response.body);
       }
     } catch (e) {
       print(e.toString());
@@ -72,10 +71,10 @@ class _MyLoginScreenState extends State<LoginScreen> {
         await values.setString('cookie', cookie.value);
         await values.setString('email', email);
         await values.setString('password', password);
+        createCart();
         setState(() {
           loginEmail = values.getString('email');
         });
-        createCart();
       } else {
         print("oops");
         if (response.statusCode == 401) {

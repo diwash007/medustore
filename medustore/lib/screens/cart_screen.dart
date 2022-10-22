@@ -26,6 +26,7 @@ class _CartScreenState extends State<CartScreen> {
         Uri.parse('$apiBaseUrl/store/carts/$cartId'),
         headers: {"Content-Type": "application/json"},
       );
+      print(response.body);
       if (response.statusCode == 200) {
         cart = jsonDecode(response.body)["cart"];
         items = cart["items"];

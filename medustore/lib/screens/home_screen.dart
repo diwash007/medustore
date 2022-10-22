@@ -48,10 +48,6 @@ class _MyHomeScreenState extends State<HomeScreen> {
     var prefs = await SharedPreferences.getInstance();
     var cartId = prefs.getString('cart');
 
-    if (index == 1 && (cartId == null || cartId.isEmpty)) {
-      index++;
-    }
-
     setState(() {
       _selectedIndex = index;
     });
